@@ -4,7 +4,7 @@ require 'colorize'
 def get_response(input)
   bot_prompt = "Bot: ".green
   print bot_prompt
-  
+
   #get reponses array popoluated with keys and return array of responses
   key = RESPONSES.keys.select {|k| /#{k}/ =~ input }.sample
   /#{key}/ =~ input
