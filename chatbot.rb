@@ -5,13 +5,13 @@ def get_response(input)
   bot_prompt = "Bot: ".green
   print bot_prompt
 
-  #get reponses array popoluated with keys and return array of responses
+  #get reponses and select key that user has typed in
   key = RESPONSES.keys.select {|k| /#{k}/ =~ input }.sample
   /#{key}/ =~ input
   response = RESPONSES[key]
   response.nil? ? 'sorry?' : response % { c1: $1, c2: $2, c3: $3, c4: $c4}
+  save_responses(response)
 end
-
 
 # Responses saved in a Hash
 RESPONSES = { 'goodbye' => 'bye',
@@ -43,22 +43,32 @@ RESPONSES = { 'goodbye' => 'bye',
 
   print person_prompt
 
+  def add_new_response(input)
+    puts "Want do you want say:"
+    call = gets.chomp
+    puts "What do you want the response to be:"
+    response = gets.chomp
+
+    RESPONSES[call] = response
+  end
+
+  def save_reponses(input)
+    # open a file for writing
+    puts RESPONSES
+  end
+
   # while loop => condition: get stdin put in variable input
   while(input = gets.chomp) do
 
     if input == 'quit'
       break
+
     elsif input == 'add new response'
-        puts "Want do you want say:"
-        call = gets.chomp
-        puts "What do you want the response to be:"
-        response = gets.chomp
-
-        RESPONSES[call] = response
-
-        puts RESPONSES
+      add_new_response(input)
+      puts RESPONSES
+    else
+      puts get_response(input)
     end
 
-    puts get_response(input)
     print person_prompt
   end
