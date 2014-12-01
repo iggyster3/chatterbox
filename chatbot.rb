@@ -48,6 +48,15 @@ RESPONSES = { 'goodbye' => 'bye',
 
     if input == 'quit'
       break
+    elsif input == 'add new response'
+        puts "Want do you want say:"
+        call = gets.chomp
+        puts "What do you want the response to be:"
+        response = gets.chomp
+
+        RESPONSES[call] = response
+
+        puts RESPONSES
     end
 
     puts get_response(input)
