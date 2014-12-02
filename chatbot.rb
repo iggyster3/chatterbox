@@ -10,7 +10,14 @@ def get_response(input)
   /#{key}/ =~ input
   response = RESPONSES[key]
   response.nil? ? 'sorry?' : response % { c1: $1, c2: $2, c3: $3, c4: $c4}
-  save_responses(response)
+
+  # open the file for writing
+  file = File.open("student_responses.txt", "w")
+
+  # hash = response.to_a
+  test_array = RESPONSES.to_a  
+  response_data = test_array.join()
+  file.puts response_data
 end
 
 # Responses saved in a Hash
