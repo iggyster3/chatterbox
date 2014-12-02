@@ -10,16 +10,21 @@ def get_response(input)
   /#{key}/ =~ input
   response = RESPONSES[key]
   response.nil? ? 'sorry?' : response % { c1: $1, c2: $2, c3: $3, c4: $c4}
-
-  # open the file for writing
-  file = File.open("student_responses.txt", "w")
-
-  # hash = response.to_a
-  test_array = RESPONSES.to_a  
-  response_data = test_array.join()
-  file.puts response_data
 end
 
+
+def save_reponses()
+  # open the file for writing
+  file = File.open("student_responses.txt", "w")
+  # get responses and turn into an array and save in variable
+  student_responses = RESPONSES.to_a
+  # get new student array converts it to a string and creates new seprator
+  response_data = student_responses.join()
+  # put new string array into student_reponses.txt file
+  file.puts response_data
+  # close file
+  file.close()
+end
 # Responses saved in a Hash
 RESPONSES = { 'goodbye' => 'bye',
   'sayonara' => 'sayonara',
@@ -59,11 +64,6 @@ RESPONSES = { 'goodbye' => 'bye',
     RESPONSES[call] = response
   end
 
-  def save_reponses(input)
-    # open a file for writing
-    puts RESPONSES
-  end
-
   # while loop => condition: get stdin put in variable input
   while(input = gets.chomp) do
 
@@ -74,6 +74,7 @@ RESPONSES = { 'goodbye' => 'bye',
       add_new_response(input)
       puts RESPONSES
     else
+      save_reponses()
       puts get_response(input)
     end
 
