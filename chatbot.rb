@@ -1,5 +1,6 @@
 require 'colorize'
 
+@load_responses = [] # an empty array accessible to all methods
 
 def get_response(input)
   bot_prompt = "Bot: ".green
@@ -15,7 +16,7 @@ end
 
 def save_reponses()
   # open the file for writing
-  file = File.open("student_responses.txt", "w")
+  file = File.open("student_responses.csv", "w")
   # get responses and turn into an array and save in variable
   student_responses = RESPONSES.to_a
   # get new student array converts it to a string and creates new seprator
@@ -25,6 +26,19 @@ def save_reponses()
   # close file
   file.close()
 end
+
+def load_students()
+  # # open the file for reading
+  file = File.open("student_responses.csv", "r")
+
+  file.readlines.each do |line|
+      call, response = line.chomp.split(',')
+      @load_responses << {:call => call, :response => response}
+      puts @load_responses
+  end
+  file.close
+end
+
 # Responses saved in a Hash
 RESPONSES = { 'goodbye' => 'bye',
   'sayonara' => 'sayonara',
@@ -41,6 +55,9 @@ RESPONSES = { 'goodbye' => 'bye',
 
   person_prompt = "Person: ".red
   bot_prompt = "Bot: ".green
+
+  # load reponses from file
+  load_students()
 
   # Print variable greeting asking for your name
   print bot_prompt, "Hello, what's your name? \n"
@@ -63,6 +80,8 @@ RESPONSES = { 'goodbye' => 'bye',
 
     RESPONSES[call] = response
   end
+
+
 
   # while loop => condition: get stdin put in variable input
   while(input = gets.chomp) do
