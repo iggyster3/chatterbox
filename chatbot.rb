@@ -1,45 +1,9 @@
 require 'colorize'
 
-@load_responses = [] # an empty array accessible to all methods
+@load_responses = []
+@person_prompt = "Person: ".red
+@bot_prompt = "Bot: ".green
 
-def get_response(input)
-  bot_prompt = "Bot: ".green
-  print bot_prompt
-
-  #get reponses and select key that user has typed in
-  key = RESPONSES.keys.select {|k| /#{k}/ =~ input }.sample
-  /#{key}/ =~ input
-  response = RESPONSES[key]
-  response.nil? ? 'sorry?' : response % { c1: $1, c2: $2, c3: $3, c4: $c4}
-end
-
-
-def save_reponses()
-  # open the file for writing
-  file = File.open("student_responses.csv", "w")
-  # get responses and turn into an array and save in variable
-  student_responses = RESPONSES.to_a
-  # get new student array converts it to a string and creates new seprator
-  response_data = student_responses.join()
-  # put new string array into student_reponses.txt file
-  file.puts response_data
-  # close file
-  file.close()
-end
-
-def load_students()
-  # # open the file for reading
-  file = File.open("student_responses.csv", "r")
-
-  file.readlines.each do |line|
-      call, response = line.chomp.split(',')
-      @load_responses << {:call => call, :response => response}
-      puts @load_responses
-  end
-  file.close
-end
-
-# Responses saved in a Hash
 RESPONSES = { 'goodbye' => 'bye',
   'sayonara' => 'sayonara',
   'the weather is (.*)' => 'I hate it when it\'s %{c1}',
@@ -53,35 +17,64 @@ RESPONSES = { 'goodbye' => 'bye',
   'my lucky numbers are (.*), (.*), (.*), (.*)' => 'I did not know your lucky number was %{c1}, %{c2}, %{c3}, %{c4}'}
 
 
-  person_prompt = "Person: ".red
+def get_response(input)
   bot_prompt = "Bot: ".green
 
-  # load reponses from file
+  #get reponses and select key that user has typed in
+  key = RESPONSES.keys.select {|k| /#{k}/ =~ input }.samp
+  /#{key}/ =~ input
+  response = RESPONSES[key]
+  response.nil? ? 'sorry?' : response % { c1: $1, c2: $2, c3: $3, c4: $c4}
+end
+
+
+def save_reponses()
+  file = File.open("student_responses.csv", "w")
+  student_responses = RESPONSES.to_a
+  response_data = student_responses.join(',')
+  file.puts response_data
+  file.close()
+end
+
+def load_students()
+  file = File.open("student_responses.csv", "r")
+  file.readlines.each do |line|
+      call, response = line.chomp.split(',')
+      @load_responses << {:call => call, :response => response}
+      #puts @load_response
+  end
+  file.close
+end
+
+
   load_students()
 
   # Print variable greeting asking for your name
-  print bot_prompt, "Hello, what's your name? \n"
+  print @bot_prompt, "Hello, what's your name? \n"
 
   # get name from stdin => keyboard and chop off newline and carriage return
-  print person_prompt
+  print @person_prompt
   name = gets.chomp
 
 
   # Print name variable
-  print bot_prompt, "Hello #{name} \n"
+  print @bot_prompt, "Hello #{name} \n"
 
-  print person_prompt
+  print @person_prompt
 
   def add_new_response(input)
-    puts "Want do you want say:"
+    print @bot_prompt, "Want do you want say:"
+    puts ""
+    print @person_prompt
     call = gets.chomp
-    puts "What do you want the response to be:"
+
+    print @bot_prompt, "What do you want the response to be:"
+    puts ""
+    print @person_prompt
     response = gets.chomp
 
     RESPONSES[call] = response
   end
-
-
 
   # while loop => condition: get stdin put in variable input
   while(input = gets.chomp) do
@@ -91,11 +84,10 @@ RESPONSES = { 'goodbye' => 'bye',
 
     elsif input == 'add new response'
       add_new_response(input)
-      puts RESPONSES
     else
       save_reponses()
       puts get_response(input)
     end
 
-    print person_prompt
+    print @person_prompt
   end
